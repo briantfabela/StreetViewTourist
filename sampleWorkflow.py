@@ -1,7 +1,6 @@
-# Python 3.7.5 - Briant J. Fabela (12/26/2019)
+# Python 3.7.1 - Briant J. Fabela (12/26/2019)
 
-
-from selenium import webdriver
+from selenium import webdriver # selenium v3.141.0
 # setting up chrome driver is a hassle so im working with a local copy for win
 driver = webdriver.Chrome(r'chromedriver_win32/chromedriver_v79.exe')
 
@@ -11,21 +10,21 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 # for image cropping, drawing, and processing
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw # PIL v7.0.0
 
 # url path for google maps
 googleMapsUrl = 'https://www.google.com/maps'
 
 # xpaths
-xpaths = dict(
+xpaths = dict( # this will lets us use an object-like struture in our code
     searchField = '//*[@id="searchboxinput"]',
     searchButton = '//*[@id="searchbox-searchbutton"]',
-    photosButton = '//*[@id="pane"]/div/div[1]/div/div/div[13]/div[1]/button',
+    photosButton = '//*[@id="pane"]/div/div[1]/div/div/div[1]/div[1]/button',
     titleCard = '/html/body/jsl/div[3]/div[9]/div[12]/div[1]'
 )
 
-# lets test automating a search
-loc = '1969 S. Madison Ave YUMA AZ'
+# lets test automating a search 
+loc = '1209 W 18th Pl Yuma, AZ 85364' # random address
 
 driver.get(googleMapsUrl) # go to page
 
@@ -39,15 +38,16 @@ fieldButton.click() # click search button
 
 # the page needs some time to load here while the button loads
 # waits up to 10 seconds, making attempts every half second, until timeout
+# use try/except to avoid the program breaking if using for multiple addresses
 wait = WebDriverWait(driver, 10).until( # wait until 'Photos' button is located
     EC.presence_of_element_located((By.XPATH, xpaths['photosButton']))
 )
 
 # once button is found click it
 photosButton = driver.find_element_by_xpath(xpaths['photosButton'])
-photosButton.click() # Usually yields streetview. sometimes storefront picture
+photosButton.click() # Usually yields streetview. Sometimes storefront picture
 
-# wait for streetviewto load using the visibility of the titlecard as proxy
+# wait for streetview to load using the visibility of the titlecard as proxy
 wait = WebDriverWait(driver, 10).until(
     EC.visibility_of_element_located((By.XPATH, xpaths['titleCard']))
 )
@@ -63,19 +63,16 @@ img = Image.open('screenshot.png') # lets load our screenshot
 w, h = img.size # get screengrab's dimensions
 result = img.crop((410, 0, w, h)) # crop the left 410px
 
-'''
-# draw rectangles to cover widgets, you can skip this if you dont mind them
-rectangles = [ # drawn based on two point coords (x, y)
-    [(40,40), (200, 200)]
-    #[(0, 0), (200, 125)],
-    #[(0, h-165), (175, h)]
-]
+result.save('test.png') # the image is saved to current working directory
+img.close() 
 
-for rect in rectangles: # draw all rectangles
-    overlay = ImageDraw.Draw(img)
-    overlay.rectangle(rect, fill='black')
-    print(rect, "drawn")
-'''
-
-result.save('test.png')
-img.close()
+# Further plans for world domination or possible script implemenations:
+#TODO: implement a more object-oriented approach
+#TODO: implement better Error/Exception Handling
+#TODO: implement the script to hangle multiple/alternative addresses
+#TODO: use PIL to get rid of the widgets
+#TODO: implement this script to work well with public venues/businesses
+#TODO: aquire multiple images from albumns if available
+#TODO: acquire images of an address from multiple angles
+#TODO: use geo data to georeference this address for GIS implementation w ArcPy
+#TODO: use other APIs or webscraping to enrich data
