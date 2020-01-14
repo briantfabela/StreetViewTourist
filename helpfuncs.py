@@ -26,17 +26,17 @@ def main():
 def crop_img(img, left, top, right, bottom, name, stamp='_cropped', ext="png"):
     """Crops and saves a PIL.Image.Image Object"""
 
-    w, h = img.size
+    w, h = img.size # get the window size dimensions (window dimensions)
     result = img.crop((left, top, w-right, h-bottom))
-    result.save(path.join('pictures', name+stamp+'.'+ext))
+    result.save(path.join('pictures', name+stamp+'.'+ext)) # save in /pictures
     img.close()
-    result.close()
+    result.close() # close both objects
 
 def read_addresses(txt_file_path):
-    '''returns a text file of addresses as a python list'''
+    '''Returns a text file of addresses as a python list'''
 
     addresses = open(txt_file_path) # file should have an address per line
-    return [line.strip('\n') for line in addresses]
+    return [line.strip('\n') for line in addresses] # returns addresses as list
 
 class Tourist:
     ''' A Tourist uses the selenium driver to visit a list of addresses'''
@@ -47,8 +47,17 @@ class Tourist:
         self.locations = read_addresses(addresses_txt_file_path)
         self.driver_fp = r'chromedriver_win32/chromedriver_v79.exe'
 
+    def wait_and_click(self, driver, xpath, timeout_limit=10):
+        '''Waits for button visibility and attempts to click until timeout'''
+    
+        wait = WebDriverWait(driver, timeout_limit).until(
+            EC.visibility_of_element_located((By.XPATH, xpath))
+        ) # will wait, or timeout if button not found
+
+        button = driver.find_element_by_xpath(xpath)
+        button.click()
+
     def tour(self, max_window=True, dims=(1080,800)):
-        
         '''Opens the webridriver using Selenium.
 
         After opening the driver it begins parsing thru self.locations and
@@ -57,7 +66,7 @@ class Tourist:
 
         driver = webdriver.Chrome(self.driver_fp)
 
-        # set window and go to url
+        # set window size and go to url
         if max_window: 
             driver.maximize_window()
         else:
@@ -68,13 +77,16 @@ class Tourist:
             field = driver.find_element_by_xpath(self.xpaths['searchField'])
             field.send_keys(loc) # type in location
 
+            '''
             field_button = driver.find_element_by_xpath(self.xpaths['searchButton'])
-            field_button.click() # click search button
+            field_button.click() # click search button'''
+
+            self.wait_and_click(driver, self.xpaths['searchField'])
 
             # implementation of an explicit wait while content loads
             wait = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, self.xpaths['photosButton']))
-            )
+                EC.visibility_of_element_located((By.XPATH, self.xpaths['photosButton']))
+            ) # 'visibility_of_element' seems to throw out far less TimeoutExceptions
             
             photosButton = driver.find_element_by_xpath(self.xpaths['photosButton'])
             photosButton.click()
