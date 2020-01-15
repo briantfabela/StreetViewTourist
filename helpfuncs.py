@@ -41,6 +41,19 @@ def read_addresses(txt_file_path):
     addresses = open(txt_file_path) # file should have an address per line
     return [line.strip('\n') for line in addresses] # returns addresses as list
 
+def get_latlong(url):
+    '''Returns dict of latitude & longitude from a location in google maps'''
+
+    x, y = url.split('/@')[1].split('/data=!')[0].split(',')[:2]
+    return GeoInfo(x, y)
+
+class GeoInfo:
+    '''Stores geographical data about a location visisted on google maps'''
+
+    def __init__(self, x, y):
+        self.lat = float(x)
+        self.long = float(y)
+
 class Tourist:
     ''' A Tourist uses the selenium driver to visit a list of addresses'''
 
@@ -88,7 +101,7 @@ class Tourist:
             wait = WebDriverWait(self.driver, 10).until(
                 EC.visibility_of_element_located((By.XPATH, self.xpaths['photosButton']))
             ) # 'visibility_of_element' seems to throw out far less TimeoutExceptions
-            
+
             photosButton = self.driver.find_element_by_xpath(self.xpaths['photosButton'])
             photosButton.click()
 
@@ -99,19 +112,22 @@ class Tourist:
             # take screen capture
             self.driver.save_screenshot(path.join('pictures', 'temp_screenshot.png'))
             img = Image.open(r'pictures/temp_screenshot.png')
-            crop_img(img, 410, 0, 0, 0, loc)
+            crop_img(img, 410, 0, 0, 0, loc) # crop the img and save it
             print(loc, "successfully screencaptured")
+
+            # get lat and long; print to console
+            latlong = get_latlong(self.driver.current_url)
+            print("lat: {} long: {}".format(latlong.lat, latlong.long))
 
             back_button = self.driver.find_element_by_xpath(self.xpaths['backButton'])
             back_button.click() # click back button
-
 
             wait = WebDriverWait(self.driver, 10).until( # searchField needs some time to load
                 EC.visibility_of_element_located((By.XPATH, self.xpaths['searchField']))
             )
 
             field.clear()
-        
+
         print("Tour has ended.")
 
 if __name__ == "__main__":

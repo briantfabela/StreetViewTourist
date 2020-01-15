@@ -68,8 +68,6 @@ img.close()
 
 '''
 # Further plans for world domination:
-#TODO: implement better Error/Exception Handling
-#TODO: implement this script to work well with public venues/businesses
 #TODO: aquire multiple images from albumns if available
 #TODO: acquire images of an address from multiple angles
 #TODO: use geo data to georeference this address for GIS implementation w ArcPy

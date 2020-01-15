@@ -20,7 +20,7 @@ Something like ***4123 W 14th St Yuma, AZ 85364*** works pefectly. As do most re
 
 {St num} {St name} {city},{State} {zip}
 
-Some commercial venues also work fine such as ***Walgreens Pharmacy 4th Ave Yuma, AZ*** or uniquely named local businesses like ***Ricky's Other Place***. But commercial chains do require a unique St name and City in order for the google algorithms to take you directly to the store at the address you are referencing. If there were two Walgreens along 4th Ave, the serach result would not yield a unique location. As of now, the first result in that screen is selected; as it is *often* the most relevant result. 
+Some commercial venues also work fine such as ***Walgreens Pharmacy 4th Ave Yuma, AZ*** or uniquely named local businesses like ***Ricky's Other Place***. But commercial chains do require a unique St name and City in order for the google algorithms to take you directly to the store at the address you are referencing. If there were two Walgreens along 4th Ave, the serach result would not yield a unique location. As of now, the first result in that screen is selected; as it is *often* the most relevant result.
 
 Example of search result screen scenario: https://www.google.com/maps/search/Circle+K+4th+ave/@32.7100013,-114.633314,4927m/data=!3m2!1e3!4b1
 
