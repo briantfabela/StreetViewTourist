@@ -64,15 +64,12 @@ w, h = img.size # get screengrab's dimensions
 result = img.crop((410, 0, w, h)) # crop the left 410px
 
 result.save('test.png') # the image is saved to current working directory
-img.close() 
+img.close()
 
+'''
 # Further plans for world domination:
-#TODO: implement a more object-oriented approach
-#TODO: implement better Error/Exception Handling
-#TODO: implement the script to hangle multiple/alternative addresses
-#TODO: use PIL to get rid of the widgets
-#TODO: implement this script to work well with public venues/businesses
 #TODO: aquire multiple images from albumns if available
 #TODO: acquire images of an address from multiple angles
 #TODO: use geo data to georeference this address for GIS implementation w ArcPy
 #TODO: use other APIs or webscraping to enrich data
+'''
