@@ -9,6 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from PIL import Image # PIL v7.0.0
 from os import path
+from time import sleep
 
 def main():
     # xpaths
@@ -17,7 +18,9 @@ def main():
         searchButton = '//*[@id="searchbox-searchbutton"]',
         photosButton = '//*[@id="pane"]/div/div[1]/div/div/div[1]/div[1]/button',
         titleCard = '/html/body/jsl/div[3]/div[9]/div[12]/div[1]',
-        backButton = '//*[@id="pane"]/div/div[1]/div/div/div[2]/button[1]'
+        backButton = '//*[@id="pane"]/div/div[1]/div/div/div[2]/button[1]',
+        searchResult1 = '//*[@id="pane"]/div/div[1]/div/div/div[4]/div[1]/div[1]',
+        searchResult2 = '//*[@id="pane"]/div/div[1]/div/div/div[2]/div[1]/div[1]'
     )
 
     t = Tourist("https://www.google.com/maps", xpaths, 'adds.txt')
@@ -47,16 +50,6 @@ class Tourist:
         self.locations = read_addresses(addresses_txt_file_path)
         self.driver_fp = r'chromedriver_win32/chromedriver_v79.exe'
 
-    def wait_and_click(self, driver, xpath, timeout_limit=10):
-        '''Waits for button visibility and attempts to click until timeout'''
-    
-        wait = WebDriverWait(driver, timeout_limit).until(
-            EC.visibility_of_element_located((By.XPATH, xpath))
-        ) # will wait, or timeout if button not found
-
-        button = driver.find_element_by_xpath(xpath)
-        button.click()
-
     def tour(self, max_window=True, dims=(1080,800)):
         '''Opens the webridriver using Selenium.
 
@@ -64,47 +57,56 @@ class Tourist:
         taking screenshots of each location in Google Streetview.
         '''
 
-        driver = webdriver.Chrome(self.driver_fp)
+        self.driver = webdriver.Chrome(self.driver_fp)
 
         # set window size and go to url
         if max_window: 
-            driver.maximize_window()
+            self.driver.maximize_window()
         else:
-            driver.set_window_size(*dims)
-        driver.get(self.url)
+            self.driver.set_window_size(*dims)
+        self.driver.get(self.url)
 
         for loc in self.locations:
-            field = driver.find_element_by_xpath(self.xpaths['searchField'])
+            field = self.driver.find_element_by_xpath(self.xpaths['searchField'])
             field.send_keys(loc) # type in location
 
-            '''
-            field_button = driver.find_element_by_xpath(self.xpaths['searchButton'])
-            field_button.click() # click search button'''
+            field_button = self.driver.find_element_by_xpath(self.xpaths['searchButton'])
+            field_button.click() # click search button
 
-            self.wait_and_click(driver, self.xpaths['searchField'])
+            # If the search yields search results instead of individual result
+            if len(self.driver.current_url) < 80: # usually indicates a search result screen
+                sleep(3) # enough time for things to load; adjust as needed
+                # click on first result
+                try:
+                    # usually this is the right xpath
+                    self.driver.find_element_by_xpath(self.xpaths['searchResult1']).click()
+                except:
+                    # sometimes the above xpath does not work, we'll use this one
+                    self.driver.find_element_by_xpath(self.xpaths['searchResult2']).click()
 
             # implementation of an explicit wait while content loads
-            wait = WebDriverWait(driver, 10).until(
+            wait = WebDriverWait(self.driver, 10).until(
                 EC.visibility_of_element_located((By.XPATH, self.xpaths['photosButton']))
             ) # 'visibility_of_element' seems to throw out far less TimeoutExceptions
             
-            photosButton = driver.find_element_by_xpath(self.xpaths['photosButton'])
+            photosButton = self.driver.find_element_by_xpath(self.xpaths['photosButton'])
             photosButton.click()
 
-            wait = WebDriverWait(driver, 10).until( # wait until the streetview loads
+            wait = WebDriverWait(self.driver, 10).until( # wait until the streetview loads
                 EC.visibility_of_element_located((By.XPATH, self.xpaths['titleCard']))
             )
 
             # take screen capture
-            driver.save_screenshot(path.join('pictures', 'temp_screenshot.png'))
+            self.driver.save_screenshot(path.join('pictures', 'temp_screenshot.png'))
             img = Image.open(r'pictures/temp_screenshot.png')
             crop_img(img, 410, 0, 0, 0, loc)
             print(loc, "successfully screencaptured")
 
-            back_button = driver.find_element_by_xpath(self.xpaths['backButton'])
+            back_button = self.driver.find_element_by_xpath(self.xpaths['backButton'])
             back_button.click() # click back button
 
-            wait = WebDriverWait(driver, 10).until( # searchField needs some time to load
+
+            wait = WebDriverWait(self.driver, 10).until( # searchField needs some time to load
                 EC.visibility_of_element_located((By.XPATH, self.xpaths['searchField']))
             )
 

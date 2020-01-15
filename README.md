@@ -14,3 +14,17 @@ https://chromedriver.chromium.org/home
 
 ### Please consider Google Map/Earth's *Terms of Service and Fair Use* when using of any data acquired.
 https://www.google.com/permissions/geoguidelines/
+
+#### What Addresses work? Formats, etc.
+*"4123 W 14th St Yuma, AZ 85364"* works pefectly. As do most residential addressses in this format:
+{St num} {St name} {city},{State} {zip}
+
+Some commercial venues also work fine such as *"Walgreens Pharmacy 4th Ave Yuma, AZ"* or uniquely named local businesses like *Ricky's Other Place*. But commercial chains do require a unique St name and City in order for the google algorithms to take you directly to the address you are speaking about. If there were two Walgreens along 4th Ave, the serach result would not yield a unique value. TODO: Select the first (most relevant) result when this happens. Example: https://www.google.com/maps/search/Circle+K+4th+ave/@32.7100013,-114.633314,4927m/data=!3m2!1e3!4b1
+
+However most businesses have pictures and NOT streetview as their default image. This is problematic for this script because sometimes the pictures from the albums are bad photos, indoor photos (rarely good), or corporate-type placeholders like a logo or something straight out of Getty Images. TODOs might include identifying an element that most usually yields a streetview for businesses, schools, MHRV Parks, parks, gov't offices, etc.
+
+#### Recent Changes:
+- Improvements in common error handling
+- WebDirver is now a Tourist class attribute 'self.driver'
+- Ability to handle search results; currently now selecting the first (usually most relevant) result
+- Implemented time.sleep as an alternative to explicit waits to circumvent complex exception handling
