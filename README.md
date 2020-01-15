@@ -24,7 +24,7 @@ Some commercial venues also work fine such as ***Walgreens Pharmacy 4th Ave Yuma
 
 Example of search result screen scenario: https://www.google.com/maps/search/Circle+K+4th+ave/@32.7100013,-114.633314,4927m/data=!3m2!1e3!4b1
 
-However, most businesses have pictures and NOT streetview as their default image. This is problematic for this script because sometimes the pictures from the albums are bad photos, indoor photos (rarely good), or corporate-type placeholders like a logo or something straight out of Getty Images. TODOs might include identifying a DOM element that most usually yields a streetview for businesses, schools, MHRV Parks, parks, gov't offices, etc. However, differentiating between residential addresses and business loactions might prove challenging. Maybe the existance of that element would be the telling factor?
+However, most businesses have pictures and NOT streetview as their default image. This is problematic for this script because sometimes the pictures from the albums are bad photos, indoor photos (rarely good), or corporate-type placeholders like a logo or something straight out of Getty Images. TODOs might include identifying a DOM element that most usually yields a streetview for businesses, schools, MHRV Parks, parks, gov't offices, etc. However, realiably differentiating between residential addresses and business locations might prove somewhat challenging. Maybe the existance of that said element would be the telling factor?
 
 ### Recent Changes:
 - Improvements in common error handling
