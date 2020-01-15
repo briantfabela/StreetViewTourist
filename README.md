@@ -16,12 +16,12 @@ https://chromedriver.chromium.org/home
 https://www.google.com/permissions/geoguidelines/
 
 #### What Addresses work? Formats, etc.
-*"4123 W 14th St Yuma, AZ 85364"* works pefectly. As do most residential addressses in this format:
+***4123 W 14th St Yuma, AZ 85364*** works pefectly. As do most residential addressses in this format:
 {St num} {St name} {city},{State} {zip}
 
-Some commercial venues also work fine such as *"Walgreens Pharmacy 4th Ave Yuma, AZ"* or uniquely named local businesses like *Ricky's Other Place*. But commercial chains do require a unique St name and City in order for the google algorithms to take you directly to the address you are speaking about. If there were two Walgreens along 4th Ave, the serach result would not yield a unique value. TODO: Select the first (most relevant) result when this happens. Example: https://www.google.com/maps/search/Circle+K+4th+ave/@32.7100013,-114.633314,4927m/data=!3m2!1e3!4b1
+Some commercial venues also work fine such as ***Walgreens Pharmacy 4th Ave Yuma, AZ*** or uniquely named local businesses like ***Ricky's Other Place***. But commercial chains do require a unique St name and City in order for the google algorithms to take you directly to the store at the address you are referencing. If there were two Walgreens along 4th Ave, the serach result would not yield a unique location. As of now, the first result in that screen is selected; as it is *often* the most relevant result. Example: https://www.google.com/maps/search/Circle+K+4th+ave/@32.7100013,-114.633314,4927m/data=!3m2!1e3!4b1
 
-However most businesses have pictures and NOT streetview as their default image. This is problematic for this script because sometimes the pictures from the albums are bad photos, indoor photos (rarely good), or corporate-type placeholders like a logo or something straight out of Getty Images. TODOs might include identifying an element that most usually yields a streetview for businesses, schools, MHRV Parks, parks, gov't offices, etc.
+However, most businesses have pictures and NOT streetview as their default image. This is problematic for this script because sometimes the pictures from the albums are bad photos, indoor photos (rarely good), or corporate-type placeholders like a logo or something straight out of Getty Images. TODOs might include identifying a DOM element that most usually yields a streetview for businesses, schools, MHRV Parks, parks, gov't offices, etc. However, differentiating between residential addresses and business loactions might prove challenging. Maybe the existance of that element would be the telling factor?
 
 #### Recent Changes:
 - Improvements in common error handling
